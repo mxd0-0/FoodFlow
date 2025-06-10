@@ -15,8 +15,8 @@ application {
 repositories {
     mavenCentral()
 }
-
 dependencies {
+    val ktor_version = "3.1.3"
     implementation(libs.ktor.server.call.logging)
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.host.common)
@@ -27,4 +27,5 @@ dependencies {
     implementation(libs.logback.classic)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
+    implementation("io.ktor:ktor-server-cors:$ktor_version")
 }
