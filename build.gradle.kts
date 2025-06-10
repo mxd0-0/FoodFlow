@@ -28,4 +28,11 @@ dependencies {
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
     implementation("io.ktor:ktor-server-cors:$ktor_version")
+    implementation(platform("io.ktor:ktor-bom:3.1.3"))
+    implementation("io.ktor:ktor-server-core")
+    implementation("io.ktor:ktor-server-netty")
+    implementation("io.ktor:ktor-server-status-pages")
+    implementation("io.ktor:ktor-serialization-kotlinx-json")
+    implementation("ch.qos.logback:logback-classic:1.4.14")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 }
