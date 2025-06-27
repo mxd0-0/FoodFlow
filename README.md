@@ -23,7 +23,7 @@ FoodFlow is a lightweight Ktor-based API that delivers menu and category data fo
     { "name": "Dessert" },
     { "name": "Drink" }
   ]
-```
+
 
 ### `GET /menu`
 
