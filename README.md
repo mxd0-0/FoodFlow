@@ -1,43 +1,185 @@
-# menu
+# FoodFlow
 
-This project was created using the [Ktor Project Generator](https://start.ktor.io).
+A lightweight Ktor API serving delicious menu data
 
-Here are some useful links to get you started:
+---
 
-- [Ktor Documentation](https://ktor.io/docs/home.html)
-- [Ktor GitHub page](https://github.com/ktorio/ktor)
-- The [Ktor Slack chat](https://app.slack.com/client/T09229ZC6/C0A974TJ9). You'll need to [request an invite](https://surveys.jetbrains.com/s3/kotlin-slack-sign-up) to join.
+## Description
 
-## Features
+FoodFlow is a lightweight Ktor-based API that delivers menu and category data for food-service applications. It provides endpoints to list available categories, fetch full or filtered food items, and perform CRUD operations on menu entries. Built with Kotlin and kotlinx-serialization, FoodFlow is ideal for mobile or web apps needing a simple, scalable backend for restaurant menus.
 
-Here's a list of features included in this project:
+---
 
-| Name                                                                   | Description                                                                        |
-| ------------------------------------------------------------------------|------------------------------------------------------------------------------------ |
-| [Call Logging](https://start.ktor.io/p/call-logging)                   | Logs client requests                                                               |
-| [Routing](https://start.ktor.io/p/routing)                             | Provides a structured routing DSL                                                  |
-| [Status Pages](https://start.ktor.io/p/status-pages)                   | Provides exception handling for routes                                             |
-| [Content Negotiation](https://start.ktor.io/p/content-negotiation)     | Provides automatic content conversion according to Content-Type and Accept headers |
-| [kotlinx.serialization](https://start.ktor.io/p/kotlinx-serialization) | Handles JSON serialization using kotlinx.serialization library                     |
+## API Endpoints
 
-## Building & Running
-
-To build or run the project, use one of the following tasks:
-
-| Task                          | Description                                                          |
-| -------------------------------|---------------------------------------------------------------------- |
-| `./gradlew test`              | Run the tests                                                        |
-| `./gradlew build`             | Build everything                                                     |
-| `buildFatJar`                 | Build an executable JAR of the server with all dependencies included |
-| `buildImage`                  | Build the docker image to use with the fat JAR                       |
-| `publishImageToLocalRegistry` | Publish the docker image locally                                     |
-| `run`                         | Run the server                                                       |
-| `runDocker`                   | Run using the local docker image                                     |
-
-If the server starts successfully, you'll see the following output:
-
+### `GET /categories`
+- **Description:** Retrieve a list of all food categories.  
+- **Request Parameters:** _None_  
+- **Response Example:**
+  ```json
+  [
+    { "name": "Dinner" },
+    { "name": "Lunch" },
+    { "name": "Dessert" },
+    { "name": "Drink" }
+  ]
 ```
-2024-12-04 14:32:45.584 [main] INFO  Application - Application started in 0.303 seconds.
-2024-12-04 14:32:45.682 [main] INFO  Application - Responding at http://0.0.0.0:8080
+
+### `GET /menu`
+
+* **Description:** Retrieve all food items, optionally filtered by category.
+* **Query Parameters:**
+
+    * `category` (string, optional) – filter items by category name (case‐insensitive)
+* **Response Example (no filter):**
+
+  ```json
+  [
+    {
+      "id": 1,
+      "name": "Rovioli",
+      "description": "Piza Impermeable Bnina Bela3des wel lobya",
+      "price": 2000.0,
+      "category": "Dinner"
+    },
+    {
+      "id": 2,
+      "name": "Pizza",
+      "description": "Impermeable Bnina Bela3des wel lobya",
+      "price": 2000.0,
+      "category": "Lunch"
+    }
+  ]
+  ```
+* **Response Example (with `?category=Lunch`):**
+
+  ```json
+  [
+    {
+      "id": 2,
+      "name": "Pizza",
+      "description": "Impermeable Bnina Bela3des wel lobya",
+      "price": 2000.0,
+      "category": "Lunch"
+    }
+  ]
+  ```
+
+### `GET /menu/{id}`
+
+* **Description:** Retrieve a single food item by its ID.
+* **Path Parameters:**
+
+    * `id` (integer) – the unique identifier of the food item
+* **Response Example (found):**
+
+  ```json
+  {
+    "id": 1,
+    "name": "Rovioli",
+    "description": "Piza Impermeable Bnina Bela3des wel lobya",
+    "price": 2000.0,
+    "category": "Dinner"
+  }
+  ```
+* **Response Codes:**
+
+    * `200 OK` if found
+    * `404 Not Found` if no item with that ID exists
+
+### `POST /menu`
+
+* **Description:** Create a new food item.
+* **Request Body:** (JSON)
+
+  ```json
+  {
+    "name": "Burger",
+    "description": "Juicy beef burger with toppings",
+    "price": 1500.0,
+    "category": "Lunch"
+  }
+  ```
+* **Response Example:**
+
+  ```json
+  {
+    "id": 3,
+    "name": "Burger",
+    "description": "Juicy beef burger with toppings",
+    "price": 1500.0,
+    "category": "Lunch"
+  }
+  ```
+* **Response Codes:**
+
+    * `201 Created` with the newly created item
+    * `400 Bad Request` if invalid JSON
+
+### `PUT /menu/{id}`
+
+* **Description:** Update an existing food item.
+* **Path Parameters:**
+
+    * `id` (integer) – the ID of the item to update
+* **Request Body:** (JSON – full item payload)
+
+  ```json
+  {
+    "name": "Veggie Pizza",
+    "description": "Pizza with fresh vegetables",
+    "price": 2100.0,
+    "category": "Lunch"
+  }
+  ```
+* **Response Codes:**
+
+    * `200 OK` if update succeeded
+    * `400 Bad Request` if invalid ID or JSON
+    * `404 Not Found` if no item with that ID exists
+
+### `DELETE /menu/{id}`
+
+* **Description:** Delete a food item by its ID.
+* **Path Parameters:**
+
+    * `id` (integer) – the ID of the item to delete
+* **Response Codes:**
+
+    * `200 OK` if deletion succeeded
+    * `400 Bad Request` if invalid ID
+    * `404 Not Found` if no item with that ID exists
+
+---
+
+## Installation
+
+### Prerequisites
+
+* **Java Development Kit (JDK):** version 11 or higher
+* **Git:** to clone the repository
+* **Environment Variable (optional):**
+
+    * `PORT` — override the default HTTP port (defaults to `8080`)
+
+### Clone & Build
+
+```bash
+# Clone the repo
+git clone https://github.com/your-username/foodflow.git
+cd foodflow
+
+# Use the Gradle wrapper to build
+./gradlew build
+```
+
+### Run the Server
+
+```bash
+# Run on default port 8080
+./gradlew run
+
+# Or run on a custom port, e.g. 9090
+PORT=9090 ./gradlew run
 ```
 
