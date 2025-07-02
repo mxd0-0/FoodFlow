@@ -1,5 +1,8 @@
 # FoodFlow
 
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/3f67a9e1-6633-4e2a-8730-6dac5439f2df" alt="LawConnect Admin Banner" width="80%"/>
+</p>
 A lightweight Ktor API serving delicious menu data
 
 ---
